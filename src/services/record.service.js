@@ -4,7 +4,7 @@ const createRecordService = async (data, userId) => {
   const { amount, type, category, date, note } = data;
 
   const record = await Record.create({
-    user: userId, //user to not decide the user id
+    user: userId, //user will not decide the user id
     amount,
     type,
     category,
@@ -33,7 +33,7 @@ const getRecordsService = async (query, userId) => {
     filter.category = category;
   }
 
-  // Date filter
+  // Date filter (updated to handle date range properly)
   if (startDate || endDate) {
     filter.date = {};
 
