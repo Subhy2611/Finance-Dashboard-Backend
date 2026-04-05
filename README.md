@@ -1,62 +1,60 @@
 # Finance Dashboard Backend
 
-A scalable backend system for managing personal financial transactions with secure authentication and role-based access control.
+A scalable backend system for managing financial records with secure authentication, role-based access control, and analytical dashboard APIs.
 
 ---
 
 ## Overview
 
-This project is a RESTful backend application that allows users to:
+This project is a RESTful backend application designed to simulate a real-world finance dashboard system where users interact with financial data based on their assigned roles.
 
-* Track income and expenses
-* Filter transactions based on multiple criteria
-* View financial summaries via dashboard analytics
-* Access data securely using JWT-based authentication
-
-The system is designed with clean architecture principles and focuses on scalability, maintainability, and real-world backend practices.
+The system focuses on clean architecture, secure access control, and structured API design.
 
 ---
 
-## Key Features
+## Features Implemented
 
-### Authentication & Authorization
-
-* JWT-based authentication
-* Secure password hashing using bcrypt
+* User and Role Management
+* Financial Records CRUD Operations
+* Record Filtering (date, category, type)
+* Dashboard Summary APIs (totals and category insights)
 * Role-Based Access Control (RBAC)
-
-  * Viewer: Read-only access
-  * Analyst: View records and insights
-  * Admin: Full access
+* Input Validation and Error Handling
+* Data Persistence using MongoDB
 
 ---
 
-### Financial Records Management
+## Role-Based Access System
 
-* Create transactions (income/expense)
-* Fetch all user-specific records
-* Filter by:
-
-  * Type (income / expense)
-  * Category (food, salary, rent, etc.)
-  * Date range
+| Role    | Permissions                              |
+| ------- | ---------------------------------------- |
+| Viewer  | View own records and dashboard           |
+| Analyst | View and update records, access insights |
+| Admin   | Full access including user management    |
 
 ---
 
-### Dashboard Analytics
+## API Endpoints
 
-* Total Income
-* Total Expense
-* Net Balance
-* Category-wise breakdown
+### Authentication
 
----
+* POST /api/auth/signup
+* POST /api/auth/login
 
-### Additional Features
+### Records
 
-* User-specific data isolation (secure multi-user system)
-* Proper error handling and status codes
-* Clean MVC-based architecture
+* POST /api/records
+* GET /api/records
+* GET /api/records/recent
+* PUT /api/records/:id
+* DELETE /api/records/:id
+* GET /api/records/dashboard
+
+### User Management (Admin Only)
+
+* GET /api/users
+* PUT /api/users/:id/role
+* PUT /api/users/:id/status
 
 ---
 
@@ -71,6 +69,8 @@ The system is designed with clean architecture principles and focuses on scalabi
 
 ## Project Structure
 
+The project follows a modular MVC-inspired architecture to ensure scalability, maintainability, and separation of concerns.
+
 ```
 src/
  ├── controllers/
@@ -82,57 +82,91 @@ src/
  └── app.js
 ```
 
----
+### Controllers
 
-## API Endpoints
+Controllers handle incoming HTTP requests and send responses back to the client. They act as a bridge between routes and services.
 
-### Auth
-
-* POST /api/auth/signup
-* POST /api/auth/login
-
-### Records
-
-* POST /api/records → Create transaction
-* GET /api/records → Get all records (with filters)
-* GET /api/records/dashboard → Dashboard analytics
-* GET /api/records/recent → Latest transactions
+Example: auth.controller.js, record.controller.js, user.controller.js
 
 ---
 
-## Example Request
+### Services
 
-### Create Transaction
+Services contain the core business logic of the application. They interact with models and process data before returning it to controllers.
 
-POST /api/records
+Example: auth.service.js, record.service.js, user.service.js
 
-```json
-{
-  "amount": 5000,
-  "type": "income",
-  "category": "salary",
-  "note": "Monthly salary"
-}
-```
+---
+
+### Models
+
+Models define the structure of the database using Mongoose schemas. They represent how data is stored in MongoDB.
+
+Example: user.model.js, record.model.js
+
+---
+
+### Routes
+
+Routes define API endpoints and map them to corresponding controller functions. They also apply middleware for authentication and role-based access control.
+
+Example: auth.routes.js, record.routes.js, user.routes.js
+
+---
+
+### Middlewares
+
+Middlewares are used to process requests before they reach controllers. They handle tasks such as authentication and authorization.
+
+Example:
+
+* auth.middleware.js → verifies JWT token
+* role.middleware.js → restricts access based on user role
+
+---
+
+### Config
+
+Contains configuration-related code such as database connection setup.
+
+Example: db.js
+
+---
+
+### app.js
+
+The central file that initializes the Express application, applies global middleware, and connects all routes.
+
+---
+
+## Architecture Flow
+
+Request Flow:
+
+Client → Route → Middleware → Controller → Service → Model → Database
+
+Response Flow:
+
+Database → Model → Service → Controller → Client
 
 ---
 
 ## Setup Instructions
 
-### 1. Clone Repository
+1. Clone Repository
 
-```bash
+```
 git clone https://github.com/Subhy2611/Finance-Dashboard-Backend.git
 cd Finance-Dashboard-Backend
 ```
 
-### 2. Install Dependencies
+2. Install Dependencies
 
-```bash
+```
 npm install
 ```
 
-### 3. Create .env file
+3. Create .env file
 
 ```
 PORT=5000
@@ -140,46 +174,24 @@ MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret_key
 ```
 
-### 4. Run Server
+4. Run Server
 
-```bash
+```
 npm run dev
 ```
 
 ---
 
-## Key Learnings
+## Key Highlights
 
-* Implemented secure authentication using JWT
+* Implemented secure JWT authentication
 * Designed role-based access control system
-* Built dynamic filtering using query parameters
-* Solved real-world date filtering edge cases
-* Structured backend using scalable architecture
-
----
-
-## Project Highlights
-
-* Demonstrates strong understanding of backend fundamentals
-* Covers authentication, authorization, and data security
-* Includes real-world problem-solving (date filtering precision)
-* Shows clean separation of concerns (MVC pattern)
-
----
-
-## Future Improvements
-
-* Pagination for large datasets
-* API documentation (Swagger)
-* Deployment (Render)
-* Input validation (Joi/Zod)
+* Built modular backend using MVC architecture
+* Ensured data isolation between users
+* Developed dynamic filtering and dashboard aggregation APIs
 
 ---
 
 ## Author
 
 Subham Ghosh
-
----
-
-If you found this useful, feel free to star the repo.
