@@ -47,8 +47,8 @@ const getRecordsService = async (query, userId) => {
       const end = new Date(endDate);
       end.setHours(23, 59, 59, 999);  // end of day
       filter.date.$lte = end;
-  }
-}
+    }
+  } 
 
   // Fetch records
   const records = await Record.find(filter).sort({ date: -1 });
@@ -87,6 +87,14 @@ const getDashboardService = async (userId) => {
     balance,
     categoryMap
   };
+};
+
+const getRecentRecordsService = async (userId, limit = 3) => {
+  const records = await Record.find({ user: userId })
+    .sort({ date: -1 })   // latest transactions first
+    .limit(limit);        // only N records
+
+  return records;
 };
 
 module.exports = {
