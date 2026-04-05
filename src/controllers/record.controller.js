@@ -42,6 +42,24 @@ const getRecords = async (req, res) => {
   }
 };
 
+const getRecentRecords = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const records = await recordService.getRecentRecordsService(userId);
+
+    res.status(200).json({
+      message: "Recent records fetched",
+      records
+    });
+
+  } catch (error) {
+    res.status(400).json({
+      message: error.message
+    });
+  }
+};
+
 const getDashboard = async (req, res) => {
   try {
     const userId = req.user.id;
