@@ -158,7 +158,7 @@ npm run dev
 
 ---
 
-## Interview Highlights
+## Project Highlights
 
 * Demonstrates strong understanding of backend fundamentals
 * Covers authentication, authorization, and data security
