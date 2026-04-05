@@ -81,5 +81,6 @@ const getDashboard = async (req, res) => {
 module.exports = {
   createRecord,
   getRecords,
-  getDashboard
+  getDashboard,
+  getRecentRecords
 };
