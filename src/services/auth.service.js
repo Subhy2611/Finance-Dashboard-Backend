@@ -16,7 +16,7 @@ const signupService = async (data) => {
     name,
     email,
     password: hashedPassword,
-    role: 'viewer'
+    role: data.role ||'viewer'
   });
 
   return user;

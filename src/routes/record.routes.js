@@ -1,21 +1,70 @@
 const express = require('express');
 const router = express.Router();
 
+const { 
+  createRecord, 
+  getRecords, 
+  updateRecord, 
+  getDashboard, 
+  getRecentRecords,
+  deleteRecord
+} = require('../controllers/record.controller');
 
-const { createRecord, getRecords, getDashboard, getRecentRecords } = require('../controllers/record.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
+const roleMiddleware = require('../middlewares/role.middleware');
 
+// CREATE RECORD
+// Analyst + Admin
+router.post(
+  '/',
+  authMiddleware,
+  roleMiddleware('analyst', 'admin'),
+  createRecord
+);
 
-// Create record
-router.post('/', authMiddleware, createRecord);
+// READ DATA
+// All roles
+router.get(
+  '/',
+  authMiddleware,
+  roleMiddleware('viewer', 'analyst', 'admin'),
+  getRecords
+);
 
-// Get records
-router.get('/', authMiddleware, getRecords);
+// RECENT DATA
+// All roles
+router.get(
+  '/recent',
+  authMiddleware,
+  roleMiddleware('viewer', 'analyst', 'admin'),
+  getRecentRecords
+);
 
-// Get recent records
-router.get('/recent', authMiddleware, getRecentRecords);
+// UPDATE DATA
+// Analyst + Admin
+router.put(
+  '/:id',
+  authMiddleware,
+  roleMiddleware('analyst', 'admin'),
+  updateRecord
+);
 
-// Dashboard data
-router.get('/dashboard', authMiddleware, getDashboard);
+// DELETE DATA
+// ONLY Admin
+router.delete(
+  '/:id',
+  authMiddleware,
+  roleMiddleware('admin'),
+  deleteRecord
+);
+
+// DASHBOARD DATA
+// All roles
+router.get(
+  '/dashboard',
+  authMiddleware,
+  roleMiddleware('viewer', 'analyst', 'admin'),
+  getDashboard
+);
 
 module.exports = router;

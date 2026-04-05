@@ -97,9 +97,39 @@ const getRecentRecordsService = async (userId, limit = 3) => {
   return records;
 };
 
+const updateRecordService = async (recordId, data, userId) => {
+  const record = await Record.findOneAndUpdate(
+    { _id: recordId, user: userId }, // 🔥 only own record
+    data,
+    { new: true }
+  );
+
+  if (!record) {
+    throw new Error("Record not found or unauthorized");
+  }
+
+  return record;
+};
+
+const deleteRecordService = async (recordId, userId) => {
+  const record = await Record.findOneAndDelete({
+    _id: recordId,
+    user: userId
+  });
+
+  if (!record) {
+    throw new Error("Record not found or unauthorized");
+  }
+
+  return record;
+};
+
 module.exports = {
   createRecordService,
   getRecordsService,
   getDashboardService,
-  getRecentRecordsService
+  getRecentRecordsService,
+  updateRecordService,
+  getRecentRecordsService,
+  deleteRecordService
 };

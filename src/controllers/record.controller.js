@@ -60,6 +60,47 @@ const getRecentRecords = async (req, res) => {
   }
 };
 
+const updateRecord = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const recordId = req.params.id;
+
+    const updatedRecord = await recordService.updateRecordService(
+      recordId,
+      req.body,
+      userId
+    );
+
+    res.status(200).json({
+      message: "Record updated successfully",
+      record: updatedRecord
+    });
+
+  } catch (error) {
+    res.status(400).json({
+      message: error.message
+    });
+  }
+};
+
+const deleteRecord = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const recordId = req.params.id;
+
+    await recordService.deleteRecordService(recordId, userId);
+
+    res.status(200).json({
+      message: "Record deleted successfully"
+    });
+
+  } catch (error) {
+    res.status(400).json({
+      message: error.message
+    });
+  }
+};
+
 const getDashboard = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -82,5 +123,7 @@ module.exports = {
   createRecord,
   getRecords,
   getDashboard,
+  updateRecord,
+  deleteRecord,
   getRecentRecords
 };

@@ -4,9 +4,12 @@ const recordRoutes = require('./routes/record.routes');
 const authRoutes = require('./routes/auth.routes');
 const authMiddleware = require('./middlewares/auth.middleware');
 const roleMiddleware = require('./middlewares/role.middleware');
+const userRoutes = require('./routes/user.routes');
+
 
 // Middleware
 app.use(express.json());
+app.use('/api/users', userRoutes);
 
 app.use('/api/records', recordRoutes);
 
