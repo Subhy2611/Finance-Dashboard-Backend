@@ -85,10 +85,11 @@ const updateRecord = async (req, res) => {
 
 const deleteRecord = async (req, res) => {
   try {
-    const userId = req.user.id;
     const recordId = req.params.id;
+    const userId = req.user.id;
+    const role = req.user.role;
 
-    await recordService.deleteRecordService(recordId, userId);
+    await recordService.deleteRecordService(recordId, userId, role);
 
     res.status(200).json({
       message: "Record deleted successfully"

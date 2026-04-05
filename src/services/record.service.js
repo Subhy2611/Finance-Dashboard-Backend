@@ -111,11 +111,18 @@ const updateRecordService = async (recordId, data, userId) => {
   return record;
 };
 
-const deleteRecordService = async (recordId, userId) => {
-  const record = await Record.findOneAndDelete({
-    _id: recordId,
-    user: userId
-  });
+const deleteRecordService = async (recordId, userId, role) => {
+  let filter = {};
+
+  if (role === 'admin') {
+    // admin can delete ANY record
+    filter = { _id: recordId };
+  } else {
+    // normal users only their own
+    filter = { _id: recordId, user: userId };
+  }
+
+  const record = await Record.findOneAndDelete(filter);
 
   if (!record) {
     throw new Error("Record not found or unauthorized");
