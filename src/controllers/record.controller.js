@@ -2,7 +2,7 @@ const recordService = require('../services/record.service');
 
 const createRecord = async (req, res) => {
   try {
-    const userId = req.user.id; // match from token
+    const userId = req.user.id; // match from user specific token
 
     const record = await recordService.createRecordService(
       req.body,
