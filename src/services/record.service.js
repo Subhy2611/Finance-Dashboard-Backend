@@ -100,5 +100,6 @@ const getRecentRecordsService = async (userId, limit = 3) => {
 module.exports = {
   createRecordService,
   getRecordsService,
-  getDashboardService
+  getDashboardService,
+  getRecentRecordsService
 };
